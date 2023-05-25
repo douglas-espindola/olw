@@ -27,6 +27,6 @@ class Seller extends Model
 
     public function sales()
     {
-        return $this->hasMany(Sele::class);
+        return $this->hasMany(Sale::class);
     }
 }

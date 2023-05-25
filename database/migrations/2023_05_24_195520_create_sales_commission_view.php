@@ -23,15 +23,15 @@ return new class extends Migration
             cp.name as company,
             us.name as seller,
             uc.name as client,
-            add.city,
+            ad.city,
             ad.state,
             s.sold_at,
             s.status,
             s.total_amount,
-            round(s.tltal_amount * cp.commission_rate / 100) as comission
+            round(s.total_amount * cp.commission_rate / 100) as comission
         ")->toSql();
 
-        DB::statement("CREATE MATERIALIZED VIEW sales_commision_view AS $query");
+        DB::statement("CREATE MATERIALIZED VIEW sales_commission_view AS $query");
     }
 
     /**
