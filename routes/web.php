@@ -1,8 +1,10 @@
 <?php
 
+use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+use App\Models\SalesCommission;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('/clients', ClientController::class);
+
+    Route::get('/chat', function () {
+        $fields = implode(',', SalesCommission::getColumns());
+        $question = 'gere um gráfico das vendas por empresa no eixo y ao logo dos últimos 5 anos';
+        $config =  OpenAI::completions()->create([
+            'model' => 'text-davinci-003',
+            'prompt' => "Considerando a lista de campos($fields), gere uma configuração json do Vega-lite v5 (sem campo de dados e com descrição) que atenda o seguinte pedido $question .Resposta:",
+            'max_tokens' => 1500
+        ])->choices[0]->text;
+
+        dd($config);
+    });
 });
 
 
